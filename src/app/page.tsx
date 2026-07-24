@@ -1,65 +1,104 @@
-import Image from "next/image";
+import BestSellers from "@/components/home/best-sellers";
+import BrandsMarquee from "@/components/home/brands-marquee";
+import CategoryShowcase, {
+  type CategoryShowcaseItem,
+} from "@/components/home/category-showcase";
+import FeaturedProduct from "@/components/home/featured-product";
+import HeroSlider from "@/components/home/hero-slider";
+import { getProducts, getProductsByCategory } from "@/lib/products";
 
-export default function Home() {
+export default async function HomePage() {
+  const [products, smartphones, laptops, tablets, accessories] =
+    await Promise.all([
+      getProducts(30),
+      getProductsByCategory("smartphones", 100),
+      getProductsByCategory("laptops", 100),
+      getProductsByCategory("tablets", 100),
+      getProductsByCategory("mobile-accessories", 100),
+    ]);
+
+  const featuredProduct = products.length > 0 ? products[0] : null;
+
+  const firstAvailableImage =
+    smartphones[0]?.images?.[0] ??
+    smartphones[0]?.thumbnail ??
+    laptops[0]?.images?.[0] ??
+    laptops[0]?.thumbnail ??
+    tablets[0]?.images?.[0] ??
+    tablets[0]?.thumbnail ??
+    accessories[0]?.images?.[0] ??
+    accessories[0]?.thumbnail ??
+    products[0]?.images?.[0] ??
+    products[0]?.thumbnail ??
+    "/placeholder.png";
+
+  const categoryItems: CategoryShowcaseItem[] = [
+    {
+      key: "all",
+      title: "Бүх бүтээгдэхүүн",
+      description: "Манай бүх бүтээгдэхүүнтэй танилцаарай",
+      href: "/category",
+      image: firstAvailableImage,
+      count:
+        smartphones.length +
+        laptops.length +
+        tablets.length +
+        accessories.length,
+      featured: true,
+    },
+    {
+      key: "smartphones",
+      title: "Ухаалаг утас",
+      description: "Шинэ үеийн ухаалаг гар утаснууд",
+      href: "/category/smartphones",
+      image:
+        smartphones[0]?.thumbnail ??
+        smartphones[0]?.images?.[0] ??
+        "/placeholder.png",
+      count: smartphones.length,
+    },
+    {
+      key: "laptops",
+      title: "Зөөврийн компьютер",
+      description: "Ажил, хичээлд зориулсан төхөөрөмжүүд",
+      href: "/category/laptops",
+      image:
+        laptops[0]?.thumbnail ?? laptops[0]?.images?.[0] ?? "/placeholder.png",
+      count: laptops.length,
+    },
+    {
+      key: "tablets",
+      title: "Таблет",
+      description: "Ажил болон зугаа цэнгэлийн таблетууд",
+      href: "/category/tablets",
+      image:
+        tablets[0]?.thumbnail ?? tablets[0]?.images?.[0] ?? "/placeholder.png",
+      count: tablets.length,
+    },
+    {
+      key: "accessories",
+      title: "Дагалдах хэрэгсэл",
+      description: "Цэнэглэгч, кабель, чихэвч болон бусад",
+      href: "/category/mobile-accessories",
+      image:
+        accessories[0]?.thumbnail ??
+        accessories[0]?.images?.[0] ??
+        "/placeholder.png",
+      count: accessories.length,
+    },
+  ];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="bg-neutral-50">
+      <HeroSlider />
+
+      <CategoryShowcase items={categoryItems} />
+
+      <BestSellers products={products} />
+
+      {featuredProduct && <FeaturedProduct product={featuredProduct} />}
+
+      <BrandsMarquee />
+    </main>
   );
 }
