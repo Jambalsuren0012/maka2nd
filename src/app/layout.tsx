@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={manrope.variable}>
+    <html lang="mn" className={manrope.variable}>
       <body className="bg-neutral-50 font-sans text-neutral-950 antialiased">
         <CartProvider>
           <div className="flex min-h-screen flex-col">
