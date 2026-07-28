@@ -1,65 +1,111 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Noto_Sans } from "next/font/google";
 
-const notoSans = Noto_Sans({
-  subsets: ["latin", "cyrillic"],
-  weight: ["700", "800", "900"],
-  display: "swap",
-});
+const TEXT = "ТЕХНОЛОГИ ӨӨД ТЭМҮҮЛ";
+const ITEMS_PER_GROUP = 3;
+
+type OutlineTextProps = {
+  text: string;
+};
+
+function OutlineText({ text }: OutlineTextProps) {
+  const parts = text.split(/([Өө])/g);
+
+  return (
+    <>
+      {parts.map((part, index) => {
+        if (!part) {
+          return null;
+        }
+
+        if (part === "Ө" || part === "ө") {
+          const baseLetter = part === "Ө" ? "О" : "о";
+
+          return (
+            <span
+              key={`${part}-${index}`}
+              className="technology-special-letter"
+            >
+              <span className="technology-letter-outline">{baseLetter}</span>
+
+              <span aria-hidden="true" className="technology-letter-line" />
+            </span>
+          );
+        }
+
+        return (
+          <span key={`${part}-${index}`} className="technology-letter-outline">
+            {part}
+          </span>
+        );
+      })}
+    </>
+  );
+}
 
 export default function TechnologyMarquee() {
-  const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+
+  const firstGroupRef = useRef<HTMLDivElement>(null);
 
   const hoveredRef = useRef(false);
 
   useEffect(() => {
     let animationFrame = 0;
-
-    let autoPosition = 0;
-    let scrollPosition = 0;
-
+    let groupWidth = 0;
+    let position = 0;
     let lastTime = performance.now();
     let lastScrollY = window.scrollY;
+    let isDisposed = false;
 
-    const AUTO_SPEED = 20;
-    const SCROLL_STRENGTH = 0.24;
+    const AUTO_SPEED = 74;
+    const SCROLL_STRENGTH = 0.85;
 
-    function animate(currentTime: number) {
-      const trackElement = trackRef.current;
+    function updateGroupWidth() {
+      const firstGroup = firstGroupRef.current;
 
-      if (!trackElement) {
-        animationFrame = window.requestAnimationFrame(animate);
-
+      if (!firstGroup) {
         return;
       }
+
+      groupWidth = firstGroup.getBoundingClientRect().width;
+    }
+
+    function normalizePosition() {
+      if (groupWidth <= 0) {
+        return;
+      }
+
+      while (position <= -groupWidth) {
+        position += groupWidth;
+      }
+
+      while (position > 0) {
+        position -= groupWidth;
+      }
+    }
+
+    function animate(currentTime: number) {
+      if (isDisposed) {
+        return;
+      }
+
+      const trackElement = trackRef.current;
 
       const deltaTime = Math.min((currentTime - lastTime) / 1000, 0.05);
 
       lastTime = currentTime;
 
       if (!hoveredRef.current) {
-        autoPosition -= AUTO_SPEED * deltaTime;
+        position -= AUTO_SPEED * deltaTime;
       }
 
-      /*
-        Хэт их negative position үүсэхээс
-        хамгаална.
-      */
-      if (autoPosition <= -1600) {
-        autoPosition = 0;
+      normalizePosition();
+
+      if (trackElement) {
+        trackElement.style.transform = `translate3d(${position}px, 0, 0)`;
       }
-
-      const finalPosition = autoPosition + scrollPosition;
-
-      trackElement.style.transform = `translate3d(${finalPosition}px, 0, 0)`;
-
-      /*
-        Scroll impulse аажмаар намдана.
-      */
-      scrollPosition *= 0.9;
 
       animationFrame = window.requestAnimationFrame(animate);
     }
@@ -71,27 +117,57 @@ export default function TechnologyMarquee() {
 
       lastScrollY = currentScrollY;
 
-      scrollPosition -= scrollDelta * SCROLL_STRENGTH;
+      position -= scrollDelta * SCROLL_STRENGTH;
+
+      normalizePosition();
     }
 
-    animationFrame = window.requestAnimationFrame(animate);
+    function handleResize() {
+      updateGroupWidth();
+      normalizePosition();
+    }
+
+    updateGroupWidth();
+
+    const resizeObserver = new ResizeObserver(() => {
+      handleResize();
+    });
+
+    const firstGroup = firstGroupRef.current;
+
+    if (firstGroup) {
+      resizeObserver.observe(firstGroup);
+    }
+
+    void document.fonts.ready.then(() => {
+      if (!isDisposed) {
+        handleResize();
+      }
+    });
 
     window.addEventListener("scroll", handleScroll, {
       passive: true,
     });
 
+    window.addEventListener("resize", handleResize);
+
+    animationFrame = window.requestAnimationFrame(animate);
+
     return () => {
+      isDisposed = true;
+
       window.removeEventListener("scroll", handleScroll);
+
+      window.removeEventListener("resize", handleResize);
+
+      resizeObserver.disconnect();
 
       window.cancelAnimationFrame(animationFrame);
     };
   }, []);
 
-  const text = "Технологи өөд тэмүүл";
-
   return (
     <section
-      ref={sectionRef}
       onMouseEnter={() => {
         hoveredRef.current = true;
       }}
@@ -102,76 +178,111 @@ export default function TechnologyMarquee() {
     >
       <div
         ref={trackRef}
-        className="technology-scroll-track flex w-max items-center"
+        className="technology-marquee-track flex w-max items-center"
       >
-        {Array.from({
-          length: 8,
-        }).map((_, index) => (
+        {[0, 1].map((groupIndex) => (
           <div
-            key={index}
-            aria-hidden={index > 0}
+            key={groupIndex}
+            ref={groupIndex === 0 ? firstGroupRef : undefined}
+            aria-hidden={groupIndex === 1}
             className="flex shrink-0 items-center"
           >
-            <svg
-              viewBox="0 0 1250 170"
-              className="h-[64px] w-[470px] shrink-0 overflow-visible sm:h-[92px] sm:w-[680px] lg:h-[128px] lg:w-[950px] xl:h-[150px] xl:w-[1100px]"
-              aria-hidden="true"
-            >
-              <text
-                x="10"
-                y="130"
-                className={notoSans.className}
-                fill="none"
-                stroke="rgba(23,23,23,0.14)"
-                strokeWidth="1.8"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                style={{
-                  fontSize: "145px",
-                  fontWeight: 900,
-                  letterSpacing: "-2px",
-                }}
-              >
-                Технологи өөд тэмүүл
-              </text>
-            </svg>
-            <span className="mx-6 h-3 w-3 shrink-0 rounded-full border border-neutral-300 sm:mx-10 sm:h-4 sm:w-4" />
+            {Array.from({
+              length: ITEMS_PER_GROUP,
+            }).map((_, itemIndex) => (
+              <div key={itemIndex} className="flex shrink-0 items-center">
+                <p
+                  aria-hidden={groupIndex > 0 || itemIndex > 0}
+                  className="technology-outline-text whitespace-nowrap px-6 text-[62px] leading-none sm:px-9 sm:text-[90px] lg:text-[126px] xl:text-[148px]"
+                >
+                  <OutlineText text={TEXT} />
+                </p>
+
+                <span className="mx-5 h-3 w-3 shrink-0 rounded-full border border-neutral-300 sm:mx-8 sm:h-4 sm:w-4" />
+              </div>
+            ))}
           </div>
         ))}
       </div>
 
       <style jsx global>{`
-        .technology-scroll-track {
+        .technology-marquee-track {
+          transform: translate3d(0, 0, 0);
+
           will-change: transform;
         }
 
         .technology-outline-text {
-          font-weight: 900 !important;
+          display: inline-flex;
+          align-items: baseline;
 
-          letter-spacing: -0.015em;
+          font-family: var(--font-manrope), sans-serif;
+
+          font-weight: 800;
+          font-synthesis: none;
+
+          letter-spacing: -0.018em;
+          text-transform: uppercase;
+
+          text-rendering: geometricPrecision;
+
+          -webkit-font-smoothing: antialiased;
+
+          -moz-osx-font-smoothing: grayscale;
+        }
+
+        .technology-letter-outline {
+          display: inline-block;
 
           color: transparent;
 
-          -webkit-text-stroke: 2.4px rgba(23, 23, 23, 0.13);
+          -webkit-text-fill-color: transparent;
+
+          -webkit-text-stroke: 1.6px rgba(23, 23, 23, 0.14);
 
           paint-order: stroke fill;
+        }
 
-          text-rendering: geometricPrecision;
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
+        .technology-special-letter {
+          position: relative;
+
+          display: inline-block;
+        }
+
+        .technology-letter-line {
+          position: absolute;
+
+          left: 22%;
+          top: 50%;
+
+          width: 56%;
+          height: 1.6px;
+
+          background: rgba(23, 23, 23, 0.14);
+
+          transform: translateY(-50%);
+
+          pointer-events: none;
         }
 
         @media (max-width: 640px) {
           .technology-outline-text {
-            font-weight: 900 !important;
+            letter-spacing: -0.012em;
+          }
 
-            letter-spacing: -0.01em;
+          .technology-letter-outline {
+            -webkit-text-stroke: 1.2px rgba(23, 23, 23, 0.15);
+          }
 
-            -webkit-text-stroke: 1.8px rgba(23, 23, 23, 0.14);
+          .technology-letter-line {
+            height: 1.2px;
+
+            background: rgba(23, 23, 23, 0.15);
           }
         }
+
         @media (prefers-reduced-motion: reduce) {
-          .technology-scroll-track {
+          .technology-marquee-track {
             transform: translate3d(0, 0, 0) !important;
           }
         }

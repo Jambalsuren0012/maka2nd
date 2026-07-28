@@ -189,32 +189,52 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-white text-neutral-950">
       {/* Hero */}
-      <section className="overflow-hidden bg-[#f5f5f1]">
-        <div className="mx-auto max-w-[1600px] px-5 py-16 sm:px-8 sm:py-24 lg:px-12 lg:py-28">
-          <nav className="flex items-center gap-2 text-sm text-neutral-500">
-            <Link href="/" className="transition hover:text-neutral-950">
+      {/* Hero */}
+      <section className="relative min-h-[58svh] overflow-hidden bg-neutral-950 sm:min-h-[60svh] lg:min-h-[64svh]">
+        {/* Background image */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-[1600ms]"
+          style={{
+            backgroundImage: 'url("/assets/contact/company.jpg")',
+          }}
+        />
+
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/50" />
+
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/25" />
+
+        {/* Content */}
+        <div className="relative z-10 mx-auto flex min-h-[58svh] max-w-[1600px] flex-col justify-between px-5 pb-12 pt-8 text-white sm:min-h-[60svh] sm:px-8 sm:pb-16 sm:pt-10 lg:min-h-[64svh] lg:px-12 lg:pb-20">
+          <nav className="flex items-center gap-2 text-sm text-white/60">
+            <Link
+              href="/"
+              className="transition-colors duration-300 hover:text-white"
+            >
               Нүүр
             </Link>
 
             <span>/</span>
 
-            <span className="text-neutral-950">Холбоо барих</span>
+            <span className="text-white">Холбоо барих</span>
           </nav>
 
-          <div className="mt-14 grid gap-10 lg:grid-cols-[1.25fr_0.75fr] lg:items-end">
+          <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-neutral-400">
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#f0b488]">
                 Танд туслахад бэлэн
               </p>
 
-              <h1 className="mt-5 max-w-[900px] text-5xl font-black leading-[0.95] tracking-[-0.075em] sm:text-7xl lg:text-[92px]">
+              <h1 className="mt-5 max-w-[920px] text-[52px] font-black leading-[0.9] tracking-[-0.07em] sm:text-[72px] lg:text-[92px] xl:text-[104px]">
                 Бидэнтэй
                 <br />
                 холбогдоорой
               </h1>
             </div>
 
-            <p className="max-w-[520px] text-base leading-7 text-neutral-600 sm:text-lg">
+            <p className="max-w-[520px] text-[15px] leading-7 text-white/75 sm:text-lg sm:leading-8">
               Бүтээгдэхүүн, захиалга, хүргэлт болон бусад асуудлаар бидэнд
               хүсэлтээ илгээнэ үү. Манай баг танд аль болох хурдан хариу өгөх
               болно.

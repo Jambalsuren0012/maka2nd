@@ -5,7 +5,7 @@ export default function ExploreHero() {
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: 'url("/assets/explore/explore-hero.jpg")',
+          backgroundImage: 'url("/assets/explore/image.png")',
         }}
       />
 
