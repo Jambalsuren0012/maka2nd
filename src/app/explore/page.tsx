@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 
+import ExploreHero from "@/components/explore/explore-hero";
 import OurJourney from "@/components/explore/our-journey";
 import CoreValues from "@/components/explore/core-values";
-import ExploreTimeline from "@/components/explore/explore-timeline";
 import TechnologyMarquee from "@/components/explore/technology-marquee";
+import ExploreTimeline from "@/components/explore/explore-timeline";
 
 export const metadata: Metadata = {
   title: "Танилцах",
@@ -13,7 +14,9 @@ export const metadata: Metadata = {
 
 export default function ExplorePage() {
   return (
-    <main>
+    <main className="bg-white">
+      <ExploreHero />
+
       <OurJourney />
 
       <CoreValues />

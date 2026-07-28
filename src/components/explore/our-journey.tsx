@@ -23,7 +23,7 @@ export default function OurJourney() {
           {/* Main image */}
           <div className="relative ml-auto aspect-[0.86/1] w-[78%] rotate-[2.5deg] overflow-hidden rounded-[24px] bg-neutral-100">
             <Image
-              src="/assets/explore/journey-main.jpg"
+              src="/assets/logo.png"
               alt="SODTECH компанийн хөгжлийн замнал"
               fill
               priority
@@ -35,7 +35,7 @@ export default function OurJourney() {
           {/* Front image */}
           <div className="absolute bottom-[3%] left-0 aspect-[0.78/1] w-[52%] -rotate-[4deg] overflow-hidden rounded-[22px] bg-neutral-100 shadow-[0_30px_70px_rgba(0,0,0,0.14)] sm:bottom-[4%]">
             <Image
-              src="/assets/explore/journey-front.jpg"
+              src="/assets/logo.png"
               alt="SODTECH технологийн үйлчилгээ"
               fill
               sizes="(max-width: 1024px) 55vw, 26vw"
@@ -95,9 +95,9 @@ export default function OurJourney() {
             href="#our-history"
             className="group mt-10 inline-flex h-16 items-center gap-5 rounded-full bg-neutral-950 px-8 font-semibold text-white transition-all duration-500 hover:scale-[1.02] hover:bg-neutral-800"
           >
-            <span>Бидний түүх</span>
+            <span className="text-white">Бидний түүх</span>
 
-            <span className="transition-transform duration-500 group-hover:translate-x-1">
+            <span className="transition-transform text-white duration-500 group-hover:translate-x-1">
               <ArrowRightIcon />
             </span>
           </a>

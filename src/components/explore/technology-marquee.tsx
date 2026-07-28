@@ -112,12 +112,29 @@ export default function TechnologyMarquee() {
             aria-hidden={index > 0}
             className="flex shrink-0 items-center"
           >
-            <p
-              className={`${notoSans.className} technology-outline-text whitespace-nowrap px-7 text-[64px] font-black leading-[0.92] sm:px-10 sm:text-[92px] lg:text-[128px] xl:text-[150px]`}
+            <svg
+              viewBox="0 0 1250 170"
+              className="h-[64px] w-[470px] shrink-0 overflow-visible sm:h-[92px] sm:w-[680px] lg:h-[128px] lg:w-[950px] xl:h-[150px] xl:w-[1100px]"
+              aria-hidden="true"
             >
-              {text}
-            </p>
-
+              <text
+                x="10"
+                y="130"
+                className={notoSans.className}
+                fill="none"
+                stroke="rgba(23,23,23,0.14)"
+                strokeWidth="1.8"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                style={{
+                  fontSize: "145px",
+                  fontWeight: 900,
+                  letterSpacing: "-2px",
+                }}
+              >
+                Технологи өөд тэмүүл
+              </text>
+            </svg>
             <span className="mx-6 h-3 w-3 shrink-0 rounded-full border border-neutral-300 sm:mx-10 sm:h-4 sm:w-4" />
           </div>
         ))}
@@ -129,42 +146,30 @@ export default function TechnologyMarquee() {
         }
 
         .technology-outline-text {
-          /*
-            Кирилл дээр хэт negative tracking
-            хэрэглэхгүй.
-          */
-          letter-spacing: -0.018em;
+          font-weight: 900 !important;
 
-          /*
-            Transparent биш маш бага fill өгвөл
-            Ө, Ү зэрэг кирилл үсгийн rendering
-            илүү цэвэр болдог.
-          */
-          color: rgba(23, 23, 23, 0.012);
+          letter-spacing: -0.015em;
 
-          -webkit-text-stroke: 1px rgba(23, 23, 23, 0.14);
+          color: transparent;
+
+          -webkit-text-stroke: 2.4px rgba(23, 23, 23, 0.13);
 
           paint-order: stroke fill;
 
-          text-rendering: optimizeLegibility;
-
+          text-rendering: geometricPrecision;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
-
-          font-kerning: normal;
-          font-feature-settings:
-            "kern" 1,
-            "liga" 1;
         }
 
         @media (max-width: 640px) {
           .technology-outline-text {
-            letter-spacing: -0.012em;
+            font-weight: 900 !important;
 
-            -webkit-text-stroke: 0.85px rgba(23, 23, 23, 0.15);
+            letter-spacing: -0.01em;
+
+            -webkit-text-stroke: 1.8px rgba(23, 23, 23, 0.14);
           }
         }
-
         @media (prefers-reduced-motion: reduce) {
           .technology-scroll-track {
             transform: translate3d(0, 0, 0) !important;

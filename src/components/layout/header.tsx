@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   useCallback,
@@ -173,18 +173,26 @@ function ChevronDownIcon({ open }: { open: boolean }) {
     </svg>
   );
 }
+
 type RollingPillProps = {
   active: boolean;
+  transparent?: boolean;
   children: ReactNode;
 };
 
-function RollingPill({ active, children }: RollingPillProps) {
+function RollingPill({
+  active,
+  transparent = false,
+  children,
+}: RollingPillProps) {
   return (
     <>
-      {/* Доороос орж ирэх хар background */}
+      {/* Hover / active background */}
       <span
         aria-hidden="true"
-        className={`absolute inset-0 rounded-full bg-neutral-950 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        className={`absolute inset-0 rounded-full transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          transparent ? "bg-white/15" : "bg-neutral-950"
+        } ${
           active
             ? "translate-y-0"
             : "translate-y-[105%] group-hover/navitem:translate-y-0"
@@ -200,12 +208,14 @@ function RollingPill({ active, children }: RollingPillProps) {
               : "translate-y-0 group-hover/navitem:-translate-y-1/2"
           }`}
         >
-          {/* Энгийн хар текст */}
-          <span className="flex h-6 shrink-0 items-center justify-center gap-2 whitespace-nowrap text-neutral-950">
+          <span
+            className={`flex h-6 shrink-0 items-center justify-center gap-2 whitespace-nowrap ${
+              transparent ? "text-white" : "text-neutral-950"
+            }`}
+          >
             {children}
           </span>
 
-          {/* Hover үеийн цагаан текст */}
           <span
             aria-hidden="true"
             className="flex h-6 shrink-0 items-center justify-center gap-2 whitespace-nowrap text-white"
@@ -260,11 +270,17 @@ function FacebookIcon() {
 export default function Header() {
   const pathname = usePathname();
 
+  const isExplorePage =
+    pathname === "/explore" || pathname.startsWith("/explore/");
+
+  const [isScrolled, setIsScrolled] = useState(false);
+
   const { itemCount, isCartOpen, openCart, closeCart } = useCart();
 
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [collectionsOpen, setCollectionsOpen] = useState(false);
+
   const [hoveredNavKey, setHoveredNavKey] = useState<string | null>(null);
 
   const [searchOpen, setSearchOpen] = useState(false);
@@ -280,6 +296,22 @@ export default function Header() {
   const overlayOpen = searchOpen || mobileMenuOpen;
 
   const collectionsActive = pathname.startsWith("/category");
+
+  /*
+   * EXPLORE:
+   * top    -> transparent
+   * scroll -> white
+   *
+   * Бусад route:
+   * үргэлж white
+   */
+  const transparentHeader =
+    isExplorePage &&
+    !isScrolled &&
+    !collectionsOpen &&
+    !searchOpen &&
+    !accountOpen &&
+    !mobileMenuOpen;
 
   const clearCloseTimer = useCallback(() => {
     if (closeTimer.current) {
@@ -308,11 +340,13 @@ export default function Header() {
 
   const closeAll = useCallback(() => {
     closeCollections();
+
     setHoveredNavKey(null);
     setSearchOpen(false);
     setAccountOpen(false);
     setMobileMenuOpen(false);
     setMobileCollectionsOpen(false);
+
     closeCart();
   }, [closeCart, closeCollections]);
 
@@ -323,6 +357,7 @@ export default function Header() {
     setAccountOpen(false);
     setMobileMenuOpen(false);
     setMobileCollectionsOpen(false);
+
     setSearchOpen(true);
   }
 
@@ -373,6 +408,25 @@ export default function Header() {
     window.location.href = `/search?q=${encodeURIComponent(query)}`;
   }
 
+  /*
+   * Explore scroll detection
+   */
+  useEffect(() => {
+    function handleScroll() {
+      setIsScrolled(window.scrollY > 45);
+    }
+
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [pathname]);
+
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -405,40 +459,64 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-[100] px-1 pt-1">
+      <header
+        className={`z-[100] w-full ${
+          isExplorePage ? "fixed inset-x-0 top-0" : "sticky top-0"
+        }`}
+      >
         <div
-          className="relative rounded-t-[28px] bg-white"
+          className={`relative isolate transition-colors duration-700 ${
+            transparentHeader ? "text-white" : "text-neutral-950"
+          }`}
           onMouseEnter={clearCloseTimer}
           onMouseLeave={scheduleCloseCollections}
         >
-          <div className="mx-auto flex h-[88px] max-w-[1600px] items-center justify-between px-6 lg:px-9">
+          <div
+            aria-hidden="true"
+            className={`pointer-events-none absolute inset-0 z-0 bg-white transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              transparentHeader
+                ? "-translate-y-full opacity-0 shadow-none"
+                : "translate-y-0 opacity-100 shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
+            }`}
+          />
+          <div className="relative z-10 flex h-[88px] w-full items-center justify-between px-6 lg:px-12">
+            {/* LOGO */}
             <Link
               href="/"
               aria-label="Нүүр хуудас"
               onClick={closeAll}
-              className="group flex shrink-0 items-center gap-3 text-neutral-950 transition-opacity duration-300 hover:opacity-80"
+              className={`group flex shrink-0 items-center gap-3 transition-opacity duration-300 hover:opacity-80 ${
+                transparentHeader ? "text-white" : "text-neutral-950"
+              }`}
             >
-              <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-sky-50">
+              <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl">
                 <Image
                   src="/assets/logo.png"
                   alt="Sodtech лого"
                   width={56}
                   height={56}
                   priority
-                  className="h-11 w-11 object-contain transition-transform duration-500 group-hover:scale-105"
+                  className={`h-11 w-11 object-contain transition-all duration-500 group-hover:scale-105 ${
+                    transparentHeader ? "brightness-0 invert" : ""
+                  }`}
                 />
               </span>
 
-              <span className="text-[23px] font-medium tracking-[0.28em] text-neutral-950">
+              <span
+                className={`text-[23px] font-medium tracking-[0.28em] transition-colors duration-500 ${
+                  transparentHeader ? "text-white" : "text-neutral-950"
+                }`}
+              >
                 SODTECH
               </span>
             </Link>
 
+            {/* DESKTOP NAV */}
             <nav
               onMouseLeave={() => setHoveredNavKey(null)}
               className="hidden items-center gap-1 xl:flex"
             >
-              {/* Shop */}
+              {/* SHOP */}
               <Link
                 href="/"
                 onMouseEnter={() => {
@@ -449,25 +527,30 @@ export default function Header() {
                 className="group/navitem relative overflow-hidden rounded-full px-5 py-3 text-[16px] font-medium"
               >
                 <RollingPill
+                  transparent={transparentHeader}
                   active={
-                    hoveredNavKey !== null
-                      ? hoveredNavKey === "shop"
-                      : pathname === "/"
+                    transparentHeader
+                      ? false
+                      : hoveredNavKey !== null
+                        ? hoveredNavKey === "shop"
+                        : pathname === "/"
                   }
                 >
                   Дэлгүүр
                 </RollingPill>
               </Link>
 
-              {/* Category */}
+              {/* CATEGORY */}
               <button
                 type="button"
                 onMouseEnter={() => {
                   setHoveredNavKey("category");
+
                   openCollections();
                 }}
                 onFocus={() => {
                   setHoveredNavKey("category");
+
                   openCollections();
                 }}
                 onClick={() => {
@@ -481,10 +564,13 @@ export default function Header() {
                 className="group/navitem relative overflow-hidden rounded-full px-5 py-3 text-[16px] font-medium"
               >
                 <RollingPill
+                  transparent={transparentHeader}
                   active={
-                    hoveredNavKey !== null
-                      ? hoveredNavKey === "category"
-                      : collectionsOpen || collectionsActive
+                    transparentHeader
+                      ? false
+                      : hoveredNavKey !== null
+                        ? hoveredNavKey === "category"
+                        : collectionsOpen || collectionsActive
                   }
                 >
                   Ангилал
@@ -492,7 +578,7 @@ export default function Header() {
                 </RollingPill>
               </button>
 
-              {/* Other links */}
+              {/* OTHER LINKS */}
               {navigation.map((item) => {
                 const routeActive =
                   pathname === item.href ||
@@ -509,12 +595,16 @@ export default function Header() {
                     href={item.href}
                     onMouseEnter={() => {
                       closeCollections();
+
                       setHoveredNavKey(item.href);
                     }}
                     onClick={closeAll}
                     className="group/navitem relative overflow-hidden rounded-full px-5 py-3 text-[16px] font-medium"
                   >
-                    <RollingPill active={visualActive}>
+                    <RollingPill
+                      transparent={transparentHeader}
+                      active={transparentHeader ? false : visualActive}
+                    >
                       {item.label}
                     </RollingPill>
                   </Link>
@@ -522,44 +612,54 @@ export default function Header() {
               })}
             </nav>
 
+            {/* RIGHT ICONS */}
             <div className="relative flex items-center gap-1 sm:gap-2">
+              {/* SEARCH */}
               <button
                 type="button"
                 aria-label="Search"
                 aria-expanded={searchOpen}
                 onClick={openSearchPanel}
                 className={`flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 ${
-                  searchOpen
-                    ? "bg-neutral-950 text-white"
-                    : "hover:bg-neutral-100"
+                  transparentHeader
+                    ? "text-white hover:bg-white/15"
+                    : searchOpen
+                      ? "bg-neutral-950 text-white"
+                      : "text-neutral-950 hover:bg-neutral-100"
                 }`}
               >
                 <SearchIcon />
               </button>
 
+              {/* ACCOUNT */}
               <button
                 type="button"
                 aria-label="Account"
                 aria-expanded={accountOpen}
                 onClick={toggleAccount}
                 className={`hidden h-11 w-11 items-center justify-center rounded-full transition-all duration-300 sm:flex ${
-                  accountOpen
-                    ? "bg-neutral-950 text-white"
-                    : "hover:bg-neutral-100"
+                  transparentHeader
+                    ? "text-white hover:bg-white/15"
+                    : accountOpen
+                      ? "bg-neutral-950 text-white"
+                      : "text-neutral-950 hover:bg-neutral-100"
                 }`}
               >
                 <UserIcon />
               </button>
 
+              {/* CART */}
               <button
                 type="button"
                 aria-label={`Cart, ${itemCount} items`}
                 aria-expanded={isCartOpen}
                 onClick={handleOpenCart}
                 className={`relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 ${
-                  isCartOpen
-                    ? "bg-neutral-950 text-white"
-                    : "hover:bg-neutral-100"
+                  transparentHeader
+                    ? "text-white hover:bg-white/15"
+                    : isCartOpen
+                      ? "bg-neutral-950 text-white"
+                      : "text-neutral-950 hover:bg-neutral-100"
                 }`}
               >
                 <CartIcon />
@@ -567,9 +667,11 @@ export default function Header() {
                 {itemCount > 0 && (
                   <span
                     className={`absolute right-0 top-0 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold ${
-                      isCartOpen
+                      transparentHeader
                         ? "bg-white text-neutral-950"
-                        : "bg-neutral-950 text-white"
+                        : isCartOpen
+                          ? "bg-white text-neutral-950"
+                          : "bg-neutral-950 text-white"
                     }`}
                   >
                     {itemCount > 99 ? "99+" : itemCount}
@@ -577,19 +679,26 @@ export default function Header() {
                 )}
               </button>
 
+              {/* MOBILE MENU */}
               <button
                 type="button"
                 aria-label="Mobile menu"
                 aria-expanded={mobileMenuOpen}
                 onClick={toggleMobileMenu}
-                className="flex h-11 w-11 items-center justify-center rounded-full transition hover:bg-neutral-100 xl:hidden"
+                className={`flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 xl:hidden ${
+                  transparentHeader
+                    ? "text-white hover:bg-white/15"
+                    : mobileMenuOpen
+                      ? "bg-neutral-950 text-white"
+                      : "text-neutral-950 hover:bg-neutral-100"
+                }`}
               >
                 {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
               </button>
 
-              {/* Account popup */}
+              {/* ACCOUNT POPUP */}
               <div
-                className={`absolute right-11 top-[58px] z-[130] w-[340px] origin-top-right rounded-[22px] border border-neutral-200 bg-white p-4 shadow-[0_24px_70px_rgba(0,0,0,0.16)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:right-12 ${
+                className={`absolute right-11 top-[58px] z-[130] w-[340px] origin-top-right rounded-[22px] border border-neutral-200 bg-white p-4 text-neutral-950 shadow-[0_24px_70px_rgba(0,0,0,0.16)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:right-12 ${
                   accountOpen
                     ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
                     : "pointer-events-none -translate-y-3 scale-[0.96] opacity-0"
@@ -692,14 +801,16 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Collections mega menu */}
+          {/* COLLECTION MEGA MENU */}
           <div
             onMouseEnter={() => {
               setHoveredNavKey("category");
+
               openCollections();
             }}
             onMouseLeave={() => {
               setHoveredNavKey(null);
+
               scheduleCloseCollections();
             }}
             className={`absolute left-0 right-0 top-full hidden overflow-hidden xl:block ${
@@ -707,7 +818,7 @@ export default function Header() {
             }`}
           >
             <div
-              className={`origin-top overflow-hidden rounded-b-[28px] bg-white shadow-[0_28px_60px_rgba(0,0,0,0.10)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              className={`origin-top overflow-hidden rounded-b-[28px] bg-white text-neutral-950 shadow-[0_28px_60px_rgba(0,0,0,0.10)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                 collectionsOpen
                   ? "translate-y-0 opacity-100"
                   : "-translate-y-4 opacity-0"
@@ -758,7 +869,7 @@ export default function Header() {
                   ))}
 
                   <Link
-                    href="/category/smartphones"
+                    href="/category"
                     onClick={closeAll}
                     className={`group relative min-h-[305px] overflow-hidden rounded-[18px] bg-neutral-900 transition-all duration-700 ${
                       collectionsOpen
@@ -794,9 +905,9 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Search panel */}
+          {/* SEARCH PANEL */}
           <div
-            className={`absolute left-0 right-0 top-full z-[120] overflow-hidden rounded-b-[28px] bg-white shadow-[0_28px_70px_rgba(0,0,0,0.12)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            className={`absolute left-0 right-0 top-full z-[120] overflow-hidden rounded-b-[28px] bg-white text-neutral-950 shadow-[0_28px_70px_rgba(0,0,0,0.12)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
               searchOpen
                 ? "pointer-events-auto max-h-[420px] translate-y-0 opacity-100"
                 : "pointer-events-none max-h-0 -translate-y-4 opacity-0"
@@ -855,9 +966,9 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Mobile menu */}
+          {/* MOBILE MENU */}
           <div
-            className={`absolute left-0 right-0 top-full z-[120] overflow-y-auto bg-white shadow-xl transition-all duration-500 xl:hidden ${
+            className={`absolute left-0 right-0 top-full z-[120] overflow-y-auto bg-white text-neutral-950 shadow-xl transition-all duration-500 xl:hidden ${
               mobileMenuOpen
                 ? "pointer-events-auto max-h-[calc(100vh-90px)] opacity-100"
                 : "pointer-events-none max-h-0 opacity-0"
@@ -869,7 +980,7 @@ export default function Header() {
                 onClick={closeAll}
                 className="block border-b border-neutral-100 py-4 text-lg font-medium"
               >
-                Shop
+                Дэлгүүр
               </Link>
 
               <button
@@ -911,21 +1022,30 @@ export default function Header() {
                 </div>
               </div>
 
-              {navigation.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={closeAll}
-                  className="block border-b border-neutral-100 py-4 text-lg font-medium"
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {navigation.map((item) => {
+                const active =
+                  pathname === item.href ||
+                  pathname.startsWith(`${item.href}/`);
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={closeAll}
+                    className={`block border-b border-neutral-100 py-4 text-lg font-medium ${
+                      active ? "text-neutral-950" : "text-neutral-600"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
 
               <button
                 type="button"
                 onClick={() => {
                   setMobileMenuOpen(false);
+
                   setAccountOpen(true);
                 }}
                 className="flex w-full items-center gap-3 py-5 text-lg font-medium sm:hidden"
@@ -938,7 +1058,7 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Search болон mobile menu overlay */}
+      {/* OVERLAY */}
       <button
         type="button"
         aria-label="Close overlay"
@@ -949,13 +1069,6 @@ export default function Header() {
             : "pointer-events-none opacity-0"
         }`}
       />
-
-      {/*
-        Cart drawer энд байхгүй.
-
-        Global CartDrawer нь:
-        src/app/layout.tsx дотор нэг удаа байна.
-      */}
     </>
   );
 }
