@@ -1,91 +1,36 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import { useMemo, useState, type MouseEvent } from "react";
+import { useMemo, useRef, useState } from "react";
 
-import { useCart } from "@/context/cart-context";
-import { formatPrice } from "@/lib/format";
-import type { ElectronicCategory, Product } from "@/lib/products";
-import ProductCard from "../product/product-card";
+import ProductCard from "@/components/product/product-card";
+import type { Product } from "@/lib/products";
 
 type CategoryProductsProps = {
   products: Product[];
-  activeCategory: ElectronicCategory;
+  title: string;
+  description?: string;
+  categoryLabel?: string;
 };
 
-type SortOption = "featured" | "price-low" | "price-high" | "rating" | "name";
+const ITEMS_PER_PAGE = 12;
 
-const categoryTabs = [
-  {
-    label: "Ухаалаг утас",
-    value: "smartphones",
-    href: "/category/smartphones",
-  },
-  {
-    label: "Зөөврийн компьютер",
-    value: "laptops",
-    href: "/category/laptops",
-  },
-  {
-    label: "Таблет",
-    value: "tablets",
-    href: "/category/tablets",
-  },
-  {
-    label: "Дагалдах хэрэгсэл",
-    value: "mobile-accessories",
-    href: "/category/mobile-accessories",
-  },
-] as const;
-
-function CartIcon() {
+function ChevronLeftIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
       <path
-        d="M3 4h2.2l1.9 9.1a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L20.5 7H6"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-
-      <circle cx="9.5" cy="19" r="1.2" fill="currentColor" />
-
-      <circle cx="17.5" cy="19" r="1.2" fill="currentColor" />
-    </svg>
-  );
-}
-
-function FilterIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-4 w-4">
-      <path
-        d="M4 7h16M7 12h10M10 17h4"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function CloseIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
-      <path
-        d="m6 6 12 12M18 6 6 18"
+        d="m15 6-6 6 6 6"
         stroke="currentColor"
         strokeWidth="1.8"
         strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
 }
 
-function ArrowRightIcon() {
+function ChevronRightIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-4 w-4">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
       <path
         d="m9 6 6 6-6 6"
         stroke="currentColor"
@@ -97,319 +42,261 @@ function ArrowRightIcon() {
   );
 }
 
-function PromoCard() {
-  return (
-    <article className="relative min-h-[470px] overflow-hidden rounded-[22px] bg-neutral-900 text-white">
-      <Image
-        src="/assets/category-promo.jpg"
-        alt=""
-        fill
-        sizes="(max-width: 1024px) 100vw, 25vw"
-        className="object-cover opacity-65"
-      />
+function getPageNumbers(
+  currentPage: number,
+  totalPages: number,
+): Array<number | "..."> {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+  if (currentPage <= 4) {
+    return [1, 2, 3, 4, 5, "...", totalPages];
+  }
 
-      <div className="absolute inset-x-0 bottom-0 p-7">
-        <p className="text-xs uppercase tracking-[0.2em] text-white/60">
-          Тусгай санал
-        </p>
+  if (currentPage >= totalPages - 3) {
+    return [
+      1,
+      "...",
+      totalPages - 4,
+      totalPages - 3,
+      totalPages - 2,
+      totalPages - 1,
+      totalPages,
+    ];
+  }
 
-        <h2 className="mt-3 text-3xl font-black tracking-[-0.055em]">
-          Дагалдах хэрэгслээ хамтад нь сонгоорой
-        </h2>
-
-        <Link
-          href="/category/mobile-accessories"
-          className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/35 px-5 py-3 text-sm font-semibold transition hover:bg-white hover:text-neutral-950"
-        >
-          Бүтээгдэхүүн харах
-          <ArrowRightIcon />
-        </Link>
-      </div>
-    </article>
-  );
+  return [
+    1,
+    "...",
+    currentPage - 1,
+    currentPage,
+    currentPage + 1,
+    "...",
+    totalPages,
+  ];
 }
 
 export default function CategoryProducts({
   products,
-  activeCategory,
+  title,
+  description,
+  categoryLabel,
 }: CategoryProductsProps) {
-  const [filterOpen, setFilterOpen] = useState(false);
+  const productsSectionRef = useRef<HTMLElement>(null);
 
-  const [sort, setSort] = useState<SortOption>("featured");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const totalPages = Math.max(1, Math.ceil(products.length / ITEMS_PER_PAGE));
 
-  const [inStockOnly, setInStockOnly] = useState(false);
-
-  const maximumProductPrice = useMemo(() => {
-    return Math.ceil(Math.max(0, ...products.map((product) => product.price)));
-  }, [products]);
-
-  const [maximumPrice, setMaximumPrice] = useState(maximumProductPrice);
-
-  const brands = useMemo(() => {
-    return Array.from(
-      new Set(
-        products
-          .map((product) => product.brand)
-          .filter((brand): brand is string => Boolean(brand)),
-      ),
-    ).sort();
-  }, [products]);
+  /*
+   * Бүтээгдэхүүний тоо багасах үед
+   * currentPage нийт хуудаснаас хэтэрсэн
+   * байж болох тул render хийхдээ зөв утга ашиглана.
+   */
+  const safeCurrentPage = Math.min(Math.max(currentPage, 1), totalPages);
 
   const visibleProducts = useMemo(() => {
-    let result = products.filter((product) => {
-      const brandMatches =
-        selectedBrands.length === 0 ||
-        (product.brand && selectedBrands.includes(product.brand));
+    const startIndex = (safeCurrentPage - 1) * ITEMS_PER_PAGE;
 
-      const stockMatches = !inStockOnly || product.stock > 0;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
 
-      const priceMatches = product.price <= maximumPrice;
+    return products.slice(startIndex, endIndex);
+  }, [products, safeCurrentPage]);
 
-      return brandMatches && stockMatches && priceMatches;
-    });
+  const pageNumbers = useMemo(
+    () => getPageNumbers(safeCurrentPage, totalPages),
+    [safeCurrentPage, totalPages],
+  );
 
-    result = [...result];
+  const firstVisibleItem =
+    products.length === 0 ? 0 : (safeCurrentPage - 1) * ITEMS_PER_PAGE + 1;
 
-    switch (sort) {
-      case "price-low":
-        result.sort((a, b) => a.price - b.price);
-        break;
+  const lastVisibleItem = Math.min(
+    safeCurrentPage * ITEMS_PER_PAGE,
+    products.length,
+  );
 
-      case "price-high":
-        result.sort((a, b) => b.price - a.price);
-        break;
+  function scrollToProducts() {
+    const section = productsSectionRef.current;
 
-      case "rating":
-        result.sort((a, b) => b.rating - a.rating);
-        break;
-
-      case "name":
-        result.sort((a, b) => a.title.localeCompare(b.title));
-        break;
+    if (!section) {
+      return;
     }
 
-    return result;
-  }, [inStockOnly, maximumPrice, products, selectedBrands, sort]);
+    const headerOffset = 110;
 
-  function toggleBrand(brand: string) {
-    setSelectedBrands((current) =>
-      current.includes(brand)
-        ? current.filter((item) => item !== brand)
-        : [...current, brand],
-    );
+    const sectionTop =
+      section.getBoundingClientRect().top + window.scrollY - headerOffset;
+
+    window.scrollTo({
+      top: sectionTop,
+      behavior: "smooth",
+    });
   }
 
-  function clearFilters() {
-    setSelectedBrands([]);
-    setInStockOnly(false);
-    setMaximumPrice(maximumProductPrice);
+  function changePage(page: number) {
+    const nextPage = Math.min(Math.max(page, 1), totalPages);
+
+    if (nextPage === safeCurrentPage) {
+      return;
+    }
+
+    setCurrentPage(nextPage);
+
+    window.requestAnimationFrame(() => {
+      scrollToProducts();
+    });
   }
 
   return (
-    <section className="bg-white">
-      <div className="sticky top-0 z-40 border-b border-neutral-200 bg-white/95 backdrop-blur">
-        <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
-          <div className="flex min-h-[82px] items-center gap-6 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <button
-              type="button"
-              onClick={() => setFilterOpen(true)}
-              className="flex shrink-0 items-center gap-2 rounded-full border border-neutral-300 px-5 py-3 text-sm font-semibold transition hover:border-neutral-950"
-            >
-              <FilterIcon />
-              Шүүлтүүр
-            </button>
+    <section ref={productsSectionRef} className="bg-neutral-50">
+      <div className="mx-auto max-w-[1600px] px-5 py-12 sm:px-8 sm:py-16 lg:px-12 lg:py-20">
+        {/* CATEGORY HEADER */}
+        <div className="flex flex-col gap-6 border-b border-neutral-200 pb-9 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-neutral-400">
+              Бүтээгдэхүүний ангилал
+            </p>
 
-            <nav className="flex shrink-0 items-center gap-7">
-              {categoryTabs.map((tab) => {
-                const active = tab.value === activeCategory;
+            <h1 className="mt-3 text-4xl font-black tracking-[-0.055em] text-neutral-950 sm:text-5xl lg:text-6xl">
+              {title}
+            </h1>
 
-                return (
-                  <Link
-                    key={tab.value}
-                    href={tab.href}
-                    className={`relative py-7 text-sm font-semibold transition ${
-                      active
-                        ? "text-neutral-950"
-                        : "text-neutral-400 hover:text-neutral-950"
-                    }`}
-                  >
-                    {tab.label}
-
-                    {active && (
-                      <span className="absolute inset-x-0 bottom-0 h-0.5 bg-neutral-950" />
-                    )}
-                  </Link>
-                );
-              })}
-            </nav>
-
-            <div className="ml-auto flex shrink-0 items-center gap-4">
-              <span className="text-xs text-neutral-400">
-                {visibleProducts.length} бүтээгдэхүүн
-              </span>
-
-              <select
-                value={sort}
-                onChange={(event) => setSort(event.target.value as SortOption)}
-                className="h-11 rounded-full border border-neutral-300 bg-white px-5 text-sm font-semibold outline-none"
-              >
-                <option value="featured">Онцлох</option>
-
-                <option value="price-low">Үнэ: багаас их</option>
-
-                <option value="price-high">Үнэ: ихээс бага</option>
-
-                <option value="rating">Өндөр үнэлгээтэй</option>
-
-                <option value="name">Нэрээр</option>
-              </select>
-            </div>
+            {description && (
+              <p className="mt-4 max-w-[680px] text-[15px] leading-7 text-neutral-600 sm:text-base">
+                {description}
+              </p>
+            )}
           </div>
-        </div>
-      </div>
 
-      <div className="mx-auto max-w-[1600px] px-5 py-12 sm:px-8 lg:px-12 lg:py-16">
+          <p className="shrink-0 text-sm text-neutral-500">
+            Нийт{" "}
+            <span className="font-bold text-neutral-950">
+              {products.length}
+            </span>{" "}
+            бүтээгдэхүүн
+          </p>
+        </div>
+
+        {/* RESULT INFORMATION */}
+        {products.length > 0 && (
+          <div className="flex flex-col gap-2 py-7 text-sm text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              {firstVisibleItem}–{lastVisibleItem} бүтээгдэхүүн харуулж байна
+            </p>
+
+            {totalPages > 1 && (
+              <p>
+                {safeCurrentPage} / {totalPages} хуудас
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* PRODUCT GRID */}
         {visibleProducts.length > 0 ? (
-          <div className="grid grid-cols-1 gap-x-5 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-5 min-[480px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {visibleProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                categoryLabel={
+                  categoryLabel ?? product.brand ?? product.category
+                }
+              />
             ))}
           </div>
         ) : (
-          <div className="flex min-h-[420px] flex-col items-center justify-center rounded-[28px] bg-neutral-100 px-6 text-center">
-            <h2 className="text-3xl font-black tracking-[-0.05em]">
-              Бүтээгдэхүүн олдсонгүй
-            </h2>
+          <div className="flex min-h-[360px] items-center justify-center rounded-[24px] border border-dashed border-neutral-300 bg-white px-6 text-center">
+            <div>
+              <h2 className="text-2xl font-bold tracking-[-0.04em] text-neutral-950">
+                Бүтээгдэхүүн олдсонгүй
+              </h2>
 
-            <p className="mt-3 text-neutral-500">
-              Сонгосон шүүлтүүрт тохирох бүтээгдэхүүн алга.
-            </p>
-
-            <button
-              type="button"
-              onClick={clearFilters}
-              className="mt-7 rounded-full bg-neutral-950 px-7 py-4 font-semibold text-white"
-            >
-              Шүүлтүүр цэвэрлэх
-            </button>
+              <p className="mt-3 text-sm leading-6 text-neutral-500">
+                Энэ ангилалд одоогоор бүтээгдэхүүн байхгүй байна.
+              </p>
+            </div>
           </div>
         )}
-      </div>
 
-      <button
-        type="button"
-        aria-label="Шүүлтүүр хаах"
-        onClick={() => setFilterOpen(false)}
-        className={`fixed inset-0 z-[180] bg-black/35 transition-opacity ${
-          filterOpen
-            ? "pointer-events-auto opacity-100"
-            : "pointer-events-none opacity-0"
-        }`}
-      />
-
-      <aside
-        role="dialog"
-        aria-modal="true"
-        aria-label="Бүтээгдэхүүн шүүх"
-        className={`fixed bottom-0 left-0 top-0 z-[190] flex w-full max-w-[420px] flex-col bg-white shadow-[20px_0_70px_rgba(0,0,0,0.18)] transition-transform duration-500 ${
-          filterOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <header className="flex h-20 items-center justify-between border-b border-neutral-200 px-6">
-          <h2 className="text-xl font-bold">Шүүлтүүр</h2>
-
-          <button
-            type="button"
-            onClick={() => setFilterOpen(false)}
-            aria-label="Шүүлтүүр хаах"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-950 text-white"
+        {/* PAGINATION */}
+        {/* PAGINATION */}
+        {totalPages > 1 && (
+          <nav
+            aria-label="Бүтээгдэхүүний хуудас"
+            className="mt-14 flex items-center justify-center border-t border-neutral-200 pt-10 sm:mt-16"
           >
-            <CloseIcon />
-          </button>
-        </header>
-
-        <div className="flex-1 overflow-y-auto px-6 py-7">
-          <section>
-            <h3 className="font-bold">Брэнд</h3>
-
-            <div className="mt-4 space-y-3">
-              {brands.map((brand) => (
-                <label
-                  key={brand}
-                  className="flex cursor-pointer items-center justify-between"
+            <div className="flex items-center gap-6">
+              {/* PREVIOUS */}
+              {safeCurrentPage > 1 && (
+                <button
+                  type="button"
+                  onClick={() => changePage(safeCurrentPage - 1)}
+                  aria-label="Өмнөх хуудас"
+                  className="group flex items-center gap-2 text-[16px] font-medium text-neutral-900 transition-colors hover:text-neutral-500"
                 >
-                  <span className="text-sm text-neutral-700">{brand}</span>
+                  <ChevronLeftIcon />
 
-                  <input
-                    type="checkbox"
-                    checked={selectedBrands.includes(brand)}
-                    onChange={() => toggleBrand(brand)}
-                    className="h-4 w-4 accent-neutral-950"
-                  />
-                </label>
-              ))}
+                  <span className="hidden sm:inline">Өмнөх</span>
+                </button>
+              )}
+
+              {/* PAGE NUMBERS */}
+              <div className="flex items-center gap-2">
+                {pageNumbers.map((page, index) => {
+                  if (page === "...") {
+                    return (
+                      <span
+                        key={`dots-${index}`}
+                        className="flex h-12 min-w-8 items-center justify-center text-[16px] text-neutral-400"
+                      >
+                        …
+                      </span>
+                    );
+                  }
+
+                  const active = safeCurrentPage === page;
+
+                  return (
+                    <button
+                      key={page}
+                      type="button"
+                      onClick={() => changePage(page)}
+                      aria-current={active ? "page" : undefined}
+                      aria-label={`${page}-р хуудас`}
+                      className={`flex h-12 min-w-12 items-center justify-center rounded-full px-3 text-[16px] font-medium transition-all duration-300 ${
+                        active
+                          ? "bg-neutral-950 text-white"
+                          : "bg-transparent text-neutral-900 hover:bg-neutral-100"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* NEXT */}
+              {safeCurrentPage < totalPages && (
+                <button
+                  type="button"
+                  onClick={() => changePage(safeCurrentPage + 1)}
+                  aria-label="Дараагийн хуудас"
+                  className="group flex items-center gap-2 text-[16px] font-medium text-neutral-900 transition-colors hover:text-neutral-500"
+                >
+                  <span>Next</span>
+
+                  <span className="transition-transform duration-300 group-hover:translate-x-1">
+                    <ChevronRightIcon />
+                  </span>
+                </button>
+              )}
             </div>
-          </section>
-
-          <section className="mt-8 border-t border-neutral-200 pt-7">
-            <h3 className="font-bold">Үлдэгдэл</h3>
-
-            <label className="mt-4 flex cursor-pointer items-center justify-between">
-              <span className="text-sm text-neutral-700">
-                Зөвхөн бэлэн бараа
-              </span>
-
-              <input
-                type="checkbox"
-                checked={inStockOnly}
-                onChange={(event) => setInStockOnly(event.target.checked)}
-                className="h-4 w-4 accent-neutral-950"
-              />
-            </label>
-          </section>
-
-          <section className="mt-8 border-t border-neutral-200 pt-7">
-            <div className="flex items-center justify-between">
-              <h3 className="font-bold">Үнэ</h3>
-
-              <span className="text-sm font-semibold">
-                {formatPrice(maximumPrice)}
-              </span>
-            </div>
-
-            <input
-              type="range"
-              min={0}
-              max={maximumProductPrice}
-              value={maximumPrice}
-              onChange={(event) => setMaximumPrice(Number(event.target.value))}
-              className="mt-5 w-full accent-neutral-950"
-            />
-          </section>
-        </div>
-
-        <footer className="border-t border-neutral-200 p-6">
-          <button
-            type="button"
-            onClick={() => setFilterOpen(false)}
-            className="flex h-14 w-full items-center justify-center rounded-full bg-neutral-950 font-semibold text-white"
-          >
-            {visibleProducts.length} үр дүн харах
-          </button>
-
-          <button
-            type="button"
-            onClick={clearFilters}
-            className="mt-3 h-11 w-full text-sm font-semibold underline underline-offset-4"
-          >
-            Шүүлтүүр цэвэрлэх
-          </button>
-        </footer>
-      </aside>
+          </nav>
+        )}
+      </div>
     </section>
   );
 }
