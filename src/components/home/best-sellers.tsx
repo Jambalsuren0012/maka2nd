@@ -369,7 +369,7 @@ function ProductCard({
           disabled={product.stock <= 0}
           className="absolute bottom-12 left-1/2 z-20 -translate-x-1/2 translate-y-4 whitespace-nowrap rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white opacity-0 shadow-lg transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 hover:bg-neutral-700 disabled:cursor-not-allowed disabled:bg-neutral-400 group-hover:translate-y-0 group-hover:opacity-100"
         >
-          {product.stock > 0 ? "Add to cart" : "Out of stock"}
+          {product.stock > 0 ? "Сагслах" : "Out of stock"}
         </button>
 
         {images.length > 1 && (
@@ -758,7 +758,7 @@ function QuickView({ product, onClose }: QuickViewProps) {
               disabled={stock === 0}
               className="flex h-[52px] flex-1 items-center justify-between rounded-full bg-neutral-950 px-6 font-semibold text-white transition hover:bg-neutral-700 disabled:cursor-not-allowed disabled:bg-neutral-300"
             >
-              <span>{stock > 0 ? "Add to cart" : "Out of stock"}</span>
+              <span>{stock > 0 ? "Сагслах" : "Out of stock"}</span>
 
               {stock > 0 && (
                 <span>{formatPrice(product.price * quantity)}</span>

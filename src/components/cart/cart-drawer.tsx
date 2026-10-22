@@ -205,10 +205,24 @@ export default function CartDrawer() {
             <Link
               href="/"
               onClick={closeCart}
-              className="mt-8 inline-flex h-14 items-center justify-center gap-3 rounded-full bg-neutral-950 px-8 font-semibold text-white transition duration-300 hover:scale-[1.02] hover:bg-neutral-700"
+              className="
+    mt-8 inline-flex h-14 items-center justify-center gap-3
+    rounded-full bg-neutral-950 px-8
+    text-base font-semibold !text-white
+    opacity-100
+    transition duration-300
+    hover:scale-[1.02]
+    hover:bg-neutral-700
+    hover:!text-white
+  "
             >
-              Худалдан авалт эхлүүлэх
-              <ArrowRightIcon />
+              <span className="relative z-10 block !text-white">
+                Худалдан авалт эхлүүлэх
+              </span>
+
+              <span className="relative z-10 !text-white">
+                <ArrowRightIcon />
+              </span>
             </Link>
 
             <div className="mt-10 w-full max-w-[370px] space-y-3">

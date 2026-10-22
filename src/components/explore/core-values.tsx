@@ -49,7 +49,7 @@ export default function CoreValues() {
             </p>
 
             <h2 className="mt-4 max-w-[420px] text-5xl font-black leading-[0.95] tracking-[-0.07em] text-neutral-950 sm:text-6xl lg:text-[68px]">
-              SODTECH-ийн
+              Бидний
               <br />
               үнэт зүйлс
             </h2>
