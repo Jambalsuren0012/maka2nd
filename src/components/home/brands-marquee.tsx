@@ -16,45 +16,43 @@ type BrandsMarqueeProps = {
 const demoBrands: BrandItem[] = [
   {
     id: 1,
-    name: "BOSE",
-    className:
-      "text-[32px] font-black italic tracking-[-0.12em] sm:text-[36px]",
+    name: "САМБАР",
+    className: "text-[32px] font-black tracking-[-0.08em] sm:text-[36px]",
   },
   {
     id: 2,
-    name: "Marshall",
+    name: "ТОО ТООЛОЛ",
     className:
-      "font-serif text-[29px] font-bold italic tracking-[-0.06em] sm:text-[34px]",
+      "font-serif text-[29px] font-bold tracking-[-0.06em] sm:text-[34px]",
   },
   {
     id: 3,
-    name: "logitech",
+    name: "ТОГЛООМ",
     className: "text-[29px] font-bold tracking-[-0.08em] sm:text-[34px]",
   },
   {
     id: 4,
-    name: "Apple",
+    name: "ХЭМЖИГДЭХҮҮН",
   },
   {
     id: 5,
-    name: "Bowers & Wilkins",
+    name: "ГЕОМЕТР",
     className: "text-[18px] font-medium tracking-[-0.04em] sm:text-[21px]",
   },
   {
     id: 6,
-    name: "urbanista",
+    name: "БИЧИГ ХЭРЭГ",
     className: "text-[29px] font-black tracking-[-0.1em] sm:text-[34px]",
   },
   {
     id: 7,
-    name: "B&O",
+    name: "ГАЗАР ЗҮЙ",
     className: "font-serif text-[29px] tracking-[-0.08em] sm:text-[34px]",
   },
   {
     id: 8,
-    name: "SONY",
-    className:
-      "font-serif text-[27px] font-bold tracking-[0.02em] sm:text-[32px]",
+    name: "HANGOROMO ШОХОЙ",
+    className: "text-[27px] font-bold tracking-[0.02em] sm:text-[32px]",
   },
 ];
 
@@ -347,14 +345,14 @@ export default function BrandsMarquee({ brands }: BrandsMarqueeProps) {
     <section
       ref={sectionRef}
       aria-label="Featured brands"
-      className="relative overflow-hidden bg-white py-16 sm:py-20 lg:py-24"
+      className="relative overflow-hidden bg-[#f7f7f5] py-16 sm:py-20 lg:py-24"
     >
       <div className="relative h-[300px] sm:h-[340px]">
-        {/* Дээд шар line */}
+        {/* Top line */}
         <div
           onPointerEnter={pauseTopLine}
           onPointerLeave={resumeTopLine}
-          className="absolute left-1/2 top-[38px] z-20 w-[116vw] -translate-x-1/2 -rotate-[3.2deg] overflow-hidden bg-[#87CEEB] shadow-[0_12px_35px_rgba(0,0,0,0.10)]"
+          className="absolute left-1/2 top-[38px] z-20 w-[116vw] -translate-x-1/2 -rotate-[3.2deg] overflow-hidden bg-[#eaf3fb] shadow-[0_12px_35px_rgba(0,0,0,0.08)]"
         >
           <div
             ref={topTrackRef}
@@ -378,11 +376,11 @@ export default function BrandsMarquee({ brands }: BrandsMarqueeProps) {
           </div>
         </div>
 
-        {/* Доод саарал line */}
+        {/* Bottom line */}
         <div
           onPointerEnter={pauseBottomLine}
           onPointerLeave={resumeBottomLine}
-          className="absolute left-1/2 top-[145px] z-10 w-[116vw] -translate-x-1/2 rotate-[3.2deg] overflow-hidden bg-[#f0f0ee] shadow-[0_12px_35px_rgba(0,0,0,0.06)]"
+          className="absolute left-1/2 top-[145px] z-10 w-[116vw] -translate-x-1/2 rotate-[3.2deg] overflow-hidden bg-[#d9d3ef] shadow-[0_12px_35px_rgba(0,0,0,0.06)]"
         >
           <div
             ref={bottomTrackRef}

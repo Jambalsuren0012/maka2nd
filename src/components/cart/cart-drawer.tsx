@@ -5,15 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { useCart } from "@/context/cart-context";
-
-function formatPrice(price: number) {
-  return new Intl.NumberFormat("mn-MN", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(price);
-}
+import { formatPrice } from "@/lib/format";
 
 function CloseIcon() {
   return (
@@ -189,10 +181,6 @@ export default function CartDrawer() {
         {items.length === 0 ? (
           /* Хоосон сагс */
           <div className="flex flex-1 flex-col items-center justify-center overflow-y-auto px-7 py-12 text-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-neutral-100 text-neutral-950">
-              <CartIcon />
-            </div>
-
             <h3 className="mt-7 text-3xl font-bold tracking-[-0.05em] text-neutral-950">
               Таны сагс хоосон байна
             </h3>
@@ -228,16 +216,16 @@ export default function CartDrawer() {
             <div className="mt-10 w-full max-w-[370px] space-y-3">
               {[
                 {
-                  title: "Толгойтой чихэвч",
-                  href: "/collections/headphones",
+                  title: "Тэмдэглэлийн дэвтэр",
+                  href: "/category/notebooks",
                 },
                 {
-                  title: "Жижиг чихэвч",
-                  href: "/collections/earphones",
+                  title: "Үзэг, бичгийн хэрэгсэл",
+                  href: "/category/writing",
                 },
                 {
-                  title: "Чанга яригч",
-                  href: "/collections/speakers",
+                  title: "Зураг, урлалын хэрэгсэл",
+                  href: "/category/art-supplies",
                 },
               ].map((collection) => (
                 <Link
@@ -413,7 +401,7 @@ export default function CartDrawer() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold">Завсрын дүн</span>
+                  <span className="text-lg font-bold">Нийт дүн</span>
 
                   <span className="text-xl font-bold">
                     {formatPrice(totalPrice)}
@@ -429,7 +417,7 @@ export default function CartDrawer() {
               <Link
                 href="/checkout"
                 onClick={closeCart}
-                className="mt-5 flex h-16 w-full items-center justify-between rounded-full bg-neutral-950 px-7 font-semibold text-white transition duration-300 hover:bg-neutral-700"
+                className="mt-5 flex h-16 w-full items-center justify-between rounded-full bg-neutral-950 px-7 font-semibold !text-white transition duration-300 hover:bg-neutral-700"
               >
                 <span>Төлбөр төлөх</span>
 

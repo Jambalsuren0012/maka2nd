@@ -26,18 +26,18 @@ const colorNames = [
 const accessories = [
   {
     id: 1,
-    name: "Дээд зэрэглэлийн хамгаалалтын гэр",
-    price: 49,
+    name: "Пастел наадаг цаасны багц",
+    price: 6500,
   },
   {
     id: 2,
-    name: "USB-C цэнэглэгч кабель",
-    price: 29,
+    name: "Өнгөт гелэн үзгийн багц",
+    price: 9800,
   },
   {
     id: 3,
-    name: "Аяллын адаптер",
-    price: 39,
+    name: "Зургийн харандааны сет",
+    price: 19800,
   },
 ];
 
@@ -670,11 +670,7 @@ export default function FeaturedProduct({ product }: FeaturedProductProps) {
               disabled={stock === 0}
               className="mt-6 flex h-15 w-full items-center justify-between rounded-full bg-neutral-950 px-7 font-semibold text-white transition-all duration-300 hover:scale-[1.01] hover:bg-neutral-800 disabled:cursor-not-allowed disabled:bg-neutral-300"
             >
-              <span className="flex items-center gap-2.5">
-                <CartIcon />
-
-                {stock > 0 ? "Сагсанд нэмэх" : "Бараа дууссан"}
-              </span>
+              <span>{stock > 0 ? "Сагсанд нэмэх" : "Бараа дууссан"}</span>
 
               {stock > 0 && (
                 <span>{formatPrice(product.price * quantity)}</span>

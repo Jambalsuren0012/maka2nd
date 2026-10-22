@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import { Comfortaa } from "next/font/google";
 
 import CartDrawer from "@/components/cart/cart-drawer";
 import Footer from "@/components/layout/footer";
@@ -8,18 +8,24 @@ import { CartProvider } from "@/context/cart-context";
 
 import "./globals.css";
 
-const manrope = Manrope({
+const comfortaa = Comfortaa({
   subsets: ["latin", "cyrillic"],
-  variable: "--font-manrope",
+  variable: "--font-comfortaa",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "Sodtech",
-    template: "%s | Sodtech",
+    default: "Maka бичиг хэрэг",
+    template: "%s | Maka",
   },
-  description: "Sodtech",
+  description:
+    "Өдөр тутмын бичиг хэрэг, тэмдэглэлийн дэвтэр, урлалын хэрэгсэл.",
+  icons: {
+    icon: "/maka-icon.svg",
+    shortcut: "/maka-icon.svg",
+    apple: "/maka-icon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -28,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="mn" className={manrope.variable}>
+    <html lang="mn" className={comfortaa.variable}>
       <body className="bg-neutral-50 font-sans text-neutral-950 antialiased">
         <CartProvider>
           <div className="flex min-h-screen flex-col">

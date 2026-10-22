@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const TEXT = "ТЕХНОЛОГИ ӨӨД ТЭМҮҮЛ";
+const TEXT = "СУРАЛЦАХ БҮТЭЭХ ӨДӨР БҮР";
 const ITEMS_PER_GROUP = 3;
 
 type OutlineTextProps = {

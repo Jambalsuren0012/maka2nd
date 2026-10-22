@@ -220,10 +220,8 @@ function CompareProductCard({
           type="button"
           onClick={() => addItem(product, 1)}
           disabled={product.stock <= 0}
-          className="mt-auto flex h-12 w-full items-center justify-center gap-2 rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition hover:bg-neutral-700 disabled:cursor-not-allowed disabled:bg-neutral-300"
+          className="mt-auto flex h-12 w-full items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition hover:bg-neutral-700 disabled:cursor-not-allowed disabled:bg-neutral-300"
         >
-          <CartIcon />
-
           {product.stock > 0 ? "Сагсанд нэмэх" : "Бараа дууссан"}
         </button>
       </div>

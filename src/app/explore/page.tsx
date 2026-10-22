@@ -9,7 +9,7 @@ import ExploreTimeline from "@/components/explore/explore-timeline";
 export const metadata: Metadata = {
   title: "Танилцах",
   description:
-    "SODTECH компанийн хөгжил, түүх болон үйл ажиллагаатай танилцана уу.",
+    "Математикийн үзүүлэн, сургалтын материалаас эхэлсэн Maka.mn-ийн түүх болон бидний үнэт зүйлстэй танилцана уу.",
 };
 
 export default function ExplorePage() {

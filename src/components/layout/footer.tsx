@@ -6,20 +6,20 @@ import Image from "next/image";
 
 const collectionLinks = [
   {
-    label: "Ухаалаг утас",
-    href: "/?category=smartphones",
+    label: "Дэвтэр, төлөвлөгч",
+    href: "/category/notebooks",
   },
   {
-    label: "Зөөврийн компьютер",
-    href: "/?category=laptops",
+    label: "Үзэг, бичгийн хэрэгсэл",
+    href: "/category/writing",
   },
   {
-    label: "Таблет",
-    href: "/?category=tablets",
+    label: "Зураг, урлал",
+    href: "/category/art-supplies",
   },
   {
-    label: "Гар утасны дагалдах хэрэгсэл",
-    href: "/?category=mobile-accessories",
+    label: "Ширээний хэрэгсэл",
+    href: "/category/desk-essentials",
   },
 ];
 
@@ -173,8 +173,8 @@ export default function Footer() {
               className="inline-flex transition-opacity hover:opacity-65"
             >
               <Image
-                src="/assets/logo.png"
-                alt="Sodtech лого"
+                src="/assets/logo2.png"
+                alt="Maka бичиг хэргийн дэлгүүр"
                 width={120}
                 height={80}
                 className="h-14 w-auto object-contain"

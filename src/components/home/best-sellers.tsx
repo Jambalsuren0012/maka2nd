@@ -11,13 +11,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
 import { useCart } from "@/context/cart-context";
-import type { Product } from "@/lib/products";
+import { STATIONERY_CATEGORIES, type Product } from "@/lib/products";
+import { formatPrice } from "@/lib/format";
 
 type BestSellersProps = {
   products: Product[];
 };
 
-type CategoryKey = "headphones" | "earphones" | "speakers" | "accessories";
+type CategoryKey = "notebooks" | "writing" | "art-supplies" | "desk-essentials";
 
 type CategoryItem = {
   key: CategoryKey;
@@ -39,39 +40,30 @@ type QuickViewProps = {
 
 const categories: CategoryItem[] = [
   {
-    key: "headphones",
-    label: "Headphones",
-    keywords: ["headphone", "audio"],
+    key: "notebooks",
+    label: "Дэвтэр",
+    keywords: ["notebooks"],
     fallbackOffset: 0,
   },
   {
-    key: "earphones",
-    label: "Earphones",
-    keywords: ["earphone", "earbud", "mobile-accessories"],
+    key: "writing",
+    label: "Үзэг, бичгийн хэрэгсэл",
+    keywords: ["writing"],
     fallbackOffset: 4,
   },
   {
-    key: "speakers",
-    label: "Speakers",
-    keywords: ["speaker", "smartphone", "tablet"],
+    key: "art-supplies",
+    label: "Зураг, урлал",
+    keywords: ["art-supplies"],
     fallbackOffset: 8,
   },
   {
-    key: "accessories",
-    label: "Accessories",
-    keywords: ["accessories", "mobile-accessories", "sports-accessories"],
+    key: "desk-essentials",
+    label: "Ширээний хэрэгсэл",
+    keywords: ["desk-essentials"],
     fallbackOffset: 12,
   },
 ];
-
-function formatPrice(price: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(price);
-}
 
 function ArrowLeftIcon() {
   return (
@@ -111,7 +103,6 @@ function EyeIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-
       <circle cx="12" cy="12" r="2.8" stroke="currentColor" strokeWidth="1.6" />
     </svg>
   );
@@ -151,62 +142,6 @@ function PlusIcon() {
         stroke="currentColor"
         strokeWidth="1.8"
         strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function DriverIcon() {
-  return (
-    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" className="h-6 w-6">
-      <circle cx="16" cy="16" r="11" stroke="currentColor" strokeWidth="1.3" />
-
-      <circle cx="16" cy="16" r="6.5" stroke="currentColor" strokeWidth="1.3" />
-
-      <circle cx="16" cy="16" r="2.3" stroke="currentColor" strokeWidth="1.3" />
-    </svg>
-  );
-}
-
-function WaterIcon() {
-  return (
-    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" className="h-6 w-6">
-      <path
-        d="M16 4c4.7 6 8 10.2 8 15a8 8 0 1 1-16 0c0-4.8 3.3-9 8-15Z"
-        stroke="currentColor"
-        strokeWidth="1.4"
-      />
-
-      <path
-        d="M12 20.5c.8 2 2.2 3 4.4 3.1"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function BatteryIcon() {
-  return (
-    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" className="h-6 w-6">
-      <path d="M10 6h12v3H10V6Z" stroke="currentColor" strokeWidth="1.3" />
-
-      <rect
-        x="8"
-        y="9"
-        width="16"
-        height="18"
-        rx="2"
-        stroke="currentColor"
-        strokeWidth="1.3"
-      />
-
-      <path
-        d="m17.5 12-5 7h4l-2 5 5.5-7.5h-4l1.5-4.5Z"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinejoin="round"
       />
     </svg>
   );
@@ -271,12 +206,6 @@ function ProductCard({
   const images = getProductImages(product);
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-
-  const driverSize = `${6 + (product.id % 5)}.${product.id % 10}mm`;
-
-  const protection = product.id % 2 === 0 ? "IP54" : "IP57";
-
-  const batteryHours = 6 + (product.id % 16);
 
   function handleImageMouseMove(event: MouseEvent<HTMLDivElement>) {
     if (images.length <= 1) {
@@ -349,7 +278,7 @@ function ProductCard({
         </Link>
 
         <span className="pointer-events-none absolute left-4 top-4 z-20 rounded-full bg-[#397d0b] px-4 py-2 text-[11px] font-semibold text-white">
-          New
+          Шинэ
         </span>
 
         <button
@@ -447,47 +376,22 @@ function ProductCard({
           <span
             className={product.stock > 0 ? "text-emerald-700" : "text-red-600"}
           >
-            {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
+            {product.stock > 0
+              ? `${product.stock} ширхэг бэлэн`
+              : "Бараа дууссан"}
           </span>
         </div>
       </div>
 
-      <div className="grid grid-cols-3 border-t border-neutral-200 bg-white">
-        <div className="flex min-h-[64px] items-center gap-2 border-r border-neutral-200 px-3">
-          <span className="shrink-0 text-neutral-500">
-            <DriverIcon />
-          </span>
+      <div className="flex items-center justify-between gap-3 border-t border-neutral-200 px-5 py-4 text-xs">
+        <span className="truncate text-neutral-500">
+          {STATIONERY_CATEGORIES.find((item) => item.slug === product.category)
+            ?.title ?? product.category}
+        </span>
 
-          <div className="min-w-0">
-            <p className="text-[11px] font-semibold">{driverSize}</p>
-
-            <p className="truncate text-[9px] text-neutral-500">Driver size</p>
-          </div>
-        </div>
-
-        <div className="flex min-h-[64px] items-center gap-2 border-r border-neutral-200 px-3">
-          <span className="shrink-0 text-neutral-500">
-            <WaterIcon />
-          </span>
-
-          <div className="min-w-0">
-            <p className="text-[11px] font-semibold">{protection}</p>
-
-            <p className="truncate text-[9px] text-neutral-500">Protection</p>
-          </div>
-        </div>
-
-        <div className="flex min-h-[64px] items-center gap-2 px-3">
-          <span className="shrink-0 text-neutral-500">
-            <BatteryIcon />
-          </span>
-
-          <div className="min-w-0">
-            <p className="text-[11px] font-semibold">{batteryHours}h</p>
-
-            <p className="truncate text-[9px] text-neutral-500">Battery</p>
-          </div>
-        </div>
+        <span className="shrink-0 font-medium text-neutral-700">
+          {product.shippingInformation ?? "Хүргэлттэй"}
+        </span>
       </div>
     </article>
   );
@@ -783,8 +687,7 @@ function QuickView({ product, onClose }: QuickViewProps) {
 export default function BestSellers({ products }: BestSellersProps) {
   const swiperRef = useRef<SwiperInstance | null>(null);
 
-  const [activeCategory, setActiveCategory] =
-    useState<CategoryKey>("earphones");
+  const [activeCategory, setActiveCategory] = useState<CategoryKey>("writing");
 
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(
     null,
@@ -812,7 +715,7 @@ export default function BestSellers({ products }: BestSellersProps) {
       <section className="overflow-hidden bg-white py-16 lg:py-20">
         <div className="mx-auto  px-5 lg:px-8">
           <h2 className="text-4xl font-bold tracking-[-0.055em] text-neutral-950 sm:text-5xl lg:text-[58px]">
-            Best Sellers
+            Түгээмэл сонголтууд
           </h2>
 
           <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="maka" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d43b9b"/>
+      <stop offset="1" stop-color="#364da5"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="18" fill="url(#maka)"/>
+  <path d="M13 47V18h7l12 14 12-14h7v29h-8V30L32 42 21 30v17h-8Z" fill="#fff"/>
+</svg>

@@ -17,108 +17,28 @@ type TimelineItem = {
 
 const timelineItems: TimelineItem[] = [
   {
-    year: "2013–2015",
-    title: "Мэдээллийн технологийн тоног төхөөрөмжийн худалдаа",
+    year: "ЭХЛЭЛ",
+    title: "Сургалтын хэрэглэгдэхүүнээс эхэлсэн түүх",
     description:
-      "SODTECH нь 2013–2015 онд мэдээллийн технологийн тоног төхөөрөмжийн худалдааны чиглэлээр үйл ажиллагаагаа хөгжүүлж эхэлсэн.",
+      "Математикийн үзүүлэн, тараах материалын дэлгүүрээр эхэлсэн Maka-гийн түүх өнөөдөр суралцах, бүтээхэд хэрэгтэй бичиг хэргийн сонголтуудаар үргэлжилж байна.",
     image:
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=90",
+      "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=1800&q=90",
   },
   {
-    year: "2015",
-    title: "IT сервис үйлчилгээ",
+    year: "ЦАХИМ ДЭЛГҮҮР",
+    title: "Сургалтын материалаа онлайнд",
     description:
-      "2015 оноос IT сервис үйлчилгээг нэвтрүүлж, хэрэглэгч болон байгууллагуудад мэдээллийн технологийн мэргэжлийн үйлчилгээ үзүүлж эхэлсэн.",
+      "Дэлгүүрийн цахим хуудсаар дамжуулан бүтээгдэхүүний сонголтоо танилцуулж, хэрэглэгчдэд онлайнаар захиалах боломж хүргэж байна.",
     image:
-      "https://images.unsplash.com/photo-1531497865144-0464ef8fb9a9?auto=format&fit=crop&w=1800&q=90",
+      "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=1800&q=90",
   },
   {
-    year: "2016",
-    title: "Виртуал сервер, сүлжээний сервис",
+    year: "ӨНӨӨДӨР",
+    title: "Maka.mn — бичиг хэрэг, бүтээлч санааны дэлгүүр",
     description:
-      "2016 онд виртуал сервер болон сүлжээний сервис үйлчилгээг нэвтрүүлж, байгууллагын IT дэд бүтцийн шийдлийн хүрээг өргөжүүлсэн.",
+      "Өдөр тутмын дэвтэр, үзэг бичгийн хэрэгсэл, зураг урлал болон ширээний хэрэгслүүдийг нэг дороос сонгоорой. Maka таны хичээл, ажил, бүтээлч санааг дэмжинэ.",
     image:
-      "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1800&q=90",
-  },
-  {
-    year: "2017",
-    title: "24/7 Onsite сервис ба HIKVISION",
-    description:
-      "2017 онд 24/7 onsite сервис үйлчилгээг нэвтрүүлсэн. Мөн HIKVISION брэндийн албан ёсны борлуулагч болсон.",
-    image:
-      "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=1800&q=90",
-  },
-  {
-    year: "2018",
-    title: "Шинэ брэндүүдийн хамтын ажиллагаа",
-    description:
-      "2018 онд KASPERSKY, CISCO болон BIZHUB Konica брэндүүдийн албан ёсны борлуулагч болсон.",
-    image:
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1800&q=90",
-  },
-  {
-    year: "2019",
-    title: "DELL EMC, BLACKVUE, HP, FORTINET",
-    description:
-      "2019 онд DELL EMC, BLACKVUE, HP болон FORTINET брэндүүдийн албан ёсны борлуулагч болж, бүтээгдэхүүн болон шийдлийн багцаа өргөжүүлсэн.",
-    image:
-      "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1800&q=90",
-  },
-  {
-    year: "2020",
-    title: "MICROSOFT ба HPE",
-    description:
-      "2020 онд MICROSOFT болон HPE брэндүүдийн албан ёсны борлуулагч болсон.",
-    image:
-      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1800&q=90",
-  },
-  {
-    year: "2021",
-    title: "DELL ба BIGLUX Innovation Power",
-    description:
-      "2021 онд DELL болон BIGLUX Innovation Power брэндүүдийн албан ёсны борлуулагч болсон.",
-    image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1800&q=90",
-  },
-  {
-    year: "2022",
-    title: "MILESIGHT ба стратегийн партнершип",
-    description:
-      "2022 онд MILESIGHT брэндийн албан ёсны борлуулагч болсон. Мөн FORTINET брэндийн ADVOCATE PARTNER, HIKVISION брэндийн PLATINUM DEALER PARTNER болсон.",
-    image:
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1800&q=90",
-  },
-  {
-    year: "2023",
-    title: "FORTINET ADVOCATE PARTNER",
-    description:
-      "2023 онд FORTINET брэндийн ADVOCATE PARTNER статусаа үргэлжлүүлэн бататгасан.",
-    image:
-      "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1800&q=90",
-  },
-  {
-    year: "2024",
-    title: "HPE PARTNER",
-    description:
-      "2024 онд HPE брэндийн PARTNER болж, enterprise технологийн шийдлийн хамтын ажиллагаагаа өргөжүүлсэн.",
-    image:
-      "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1800&q=90",
-  },
-  {
-    year: "2025",
-    title: "Шинэ түвшний түншлэл",
-    description:
-      "2025 онд HIKVISION брэндийн DIAMOND DEALER PARTNER болсон. Мөн ESET, SAFETICA, NETWRIX брэндүүдийн албан ёсны борлуулагч болж, BITDEFENDER GOLD RESELLER статустай болсон.",
-    image:
-      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1800&q=90",
-  },
-  {
-    year: "2026",
-    title: "Кибер аюулгүй байдлын шинэ партнерууд",
-    description:
-      "2026 онд ONE-IDENTITY PARTNER, FORTRA PARTNER, ZECURION PARTNER болон SYTECA PARTNER болж, мэдээллийн аюулгүй байдлын шийдлийн экосистемээ улам өргөжүүлсэн.",
-    image:
-      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1800&q=90",
+      "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1800&q=90",
   },
 ];
 
@@ -172,7 +92,7 @@ export default function ExploreTimeline() {
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/35 sm:text-[11px]">
-                SODTECH
+                MAKA
               </p>
 
               <h1 className="mt-2 text-[30px] font-black tracking-[-0.055em] sm:text-4xl">
@@ -295,7 +215,7 @@ export default function ExploreTimeline() {
                           <div className="h-px w-12 bg-white/15 lg:w-14" />
 
                           <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-white/25 lg:mt-4 lg:text-xs">
-                            SODTECH · {item.year}
+                            MAKA · {item.year}
                           </p>
                         </div>
                       </div>

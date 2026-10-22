@@ -31,32 +31,32 @@ const navigation = [
 
 const collections = [
   {
-    title: "Ухаалаг утас",
-    description: "Шинэ үеийн ухаалаг гар утаснууд.",
-    href: "/category/smartphones",
+    title: "Дэвтэр, төлөвлөгч",
+    description: "Тэмдэглэл, төлөвлөгөөгөө цэгцтэй хөтлөөрэй.",
+    href: "/category/notebooks",
     image:
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=90",
+      "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=900&q=90",
   },
   {
-    title: "Зөөврийн компьютер",
-    description: "Ажил, хичээлд тохирсон компьютерууд.",
-    href: "/category/laptops",
+    title: "Үзэг, бичгийн хэрэгсэл",
+    description: "Өдөр бүр бичихэд таатай сонголтууд.",
+    href: "/category/writing",
     image:
-      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=900&q=90",
+      "https://images.unsplash.com/photo-1453738773917-9c3eff1db985?auto=format&fit=crop&w=900&q=90",
   },
   {
-    title: "Таблет",
-    description: "Ажил болон зугаа цэнгэлийн таблетууд.",
-    href: "/category/tablets",
+    title: "Зураг, урлал",
+    description: "Бүтээлч санаагаа өнгө, дүрсээр илэрхийлээрэй.",
+    href: "/category/art-supplies",
     image:
-      "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=900&q=90",
+      "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=90",
   },
   {
-    title: "Дагалдах хэрэгсэл",
-    description: "Цэнэглэгч, кабель, чихэвч болон бусад.",
-    href: "/category/mobile-accessories",
+    title: "Ширээний хэрэгсэл",
+    description: "Ажлын ширээгээ цэгцтэй, тухтай байлгаарай.",
+    href: "/category/desk-essentials",
     image:
-      "https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=900&q=90",
+      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=90",
   },
 ];
 
@@ -489,26 +489,14 @@ export default function Header() {
                 transparentHeader ? "text-white" : "text-neutral-950"
               }`}
             >
-              <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl">
-                <Image
-                  src="/assets/logo.png"
-                  alt="Sodtech лого"
-                  width={56}
-                  height={56}
-                  priority
-                  className={`h-11 w-11 object-contain transition-all duration-500 group-hover:scale-105 ${
-                    transparentHeader ? "brightness-0 invert" : ""
-                  }`}
-                />
-              </span>
-
-              <span
-                className={`text-[23px] font-medium tracking-[0.28em] transition-colors duration-500 ${
-                  transparentHeader ? "text-white" : "text-neutral-950"
-                }`}
-              >
-                SODTECH
-              </span>
+              <Image
+                src="/assets/logo2.png"
+                alt="Maka бичиг хэргийн дэлгүүр"
+                width={240}
+                height={120}
+                priority
+                className="h-14 w-14 object-contain transition-all duration-500 group-hover:scale-105 sm:h-16 sm:w-16"
+              />
             </Link>
 
             {/* DESKTOP NAV */}
@@ -935,7 +923,7 @@ export default function Header() {
                 <input
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
-                  placeholder="Search products..."
+                  placeholder="Бүтээгдэхүүн хайх..."
                   className="h-[72px] w-full rounded-full border border-neutral-300 bg-neutral-50 pl-14 pr-36 text-lg outline-none transition focus:border-neutral-950 focus:bg-white"
                 />
 
@@ -943,14 +931,14 @@ export default function Header() {
                   type="submit"
                   className="absolute right-2 top-2 h-14 rounded-full bg-neutral-950 px-8 font-semibold text-white transition hover:bg-neutral-700"
                 >
-                  Search
+                  Хайх
                 </button>
               </form>
 
               <div className="mt-5 flex flex-wrap items-center gap-2 text-sm">
-                <span className="mr-2 text-neutral-500">Popular:</span>
+                <span className="mr-2 text-neutral-500">Түгээмэл:</span>
 
-                {["Headphones", "Earphones", "Speakers", "Accessories"].map(
+                {["Дэвтэр", "Үзэг", "Усан будаг", "Ширээний хэрэгсэл"].map(
                   (item) => (
                     <button
                       key={item}

@@ -23,33 +23,33 @@ export default function OurJourney() {
           {/* Main image */}
           <div className="relative ml-auto aspect-[0.86/1] w-[78%] rotate-[2.5deg] overflow-hidden rounded-[24px] bg-neutral-100">
             <Image
-              src="/assets/logo.png"
-              alt="SODTECH компанийн хөгжлийн замнал"
+              src="https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=1200&q=85"
+              alt="Тэмдэглэлийн дэвтэр болон бичгийн хэрэгсэл"
               fill
               priority
               sizes="(max-width: 1024px) 80vw, 40vw"
-              className="object-cover grayscale transition-all duration-1000 hover:scale-[1.03]"
+              className="object-cover transition-all duration-1000 hover:scale-[1.03]"
             />
           </div>
 
           {/* Front image */}
           <div className="absolute bottom-[3%] left-0 aspect-[0.78/1] w-[52%] -rotate-[4deg] overflow-hidden rounded-[22px] bg-neutral-100 shadow-[0_30px_70px_rgba(0,0,0,0.14)] sm:bottom-[4%]">
             <Image
-              src="/assets/logo.png"
-              alt="SODTECH технологийн үйлчилгээ"
+              src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=85"
+              alt="Өнгө будгаар бүтээл хийж буй ширээ"
               fill
               sizes="(max-width: 1024px) 55vw, 26vw"
               className="object-cover transition-transform duration-1000 hover:scale-[1.04]"
             />
 
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-orange-500/15 via-transparent to-transparent" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-fuchsia-500/15 via-transparent to-transparent" />
           </div>
         </div>
 
         {/* CONTENT */}
         <div className="lg:pl-4">
           <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-neutral-400">
-            SODTECH
+            MAKA.MN · БИДНИЙ ТҮҮХ
           </p>
 
           <div className="relative mt-3 inline-block">
@@ -75,19 +75,15 @@ export default function OurJourney() {
 
           <div className="mt-10 max-w-[720px] space-y-6 text-[16px] leading-8 text-neutral-700 sm:text-[17px]">
             <p>
-              Манай компани анх 2013 оноос мэдээлэл технологийн салбарт гадаад
-              худалдаа, компьютерийн засвар, түүний дагалдах төхөөрөмж
-              борлуулалтын чиглэлээр үйл ажиллагаагаа явуулж эхэлсэн 100 хувь
-              дотоодын хөрөнгө оруулалттай компани юм. Бид бүхэн өндөр мэдлэг,
-              ур чадвар, бүтээлч сэтгэлгээ, шинэ технологийг эх орондоо
-              нэвтрүүлэхийн зэрэгцээ, захиалагч болон харилцагчийнхаа нэр хүнд,
-              эрх ашгийг тэргүүн эгнээнд тавьж, урт хугацааны найрсаг найдвартай
-              хамтын ажиллагааг эрхэмлэн, чанарын өндөр түвшинд хийж
-              гүйцэтгэхийн ямагт эрмэлзэж ажилладаг. Манай компани нь дэлхийд
-              нэр хүндтэй албан ёсны Canon, Dell, Kaspersky, Konica Minolta,
-              APC, Solarwinds, Oracle-ийн албан ёсны гэрээт борлуулагч бөгөөд
-              чанартай сервис үйлчилгээний хамтаар дэвшилтэд технологийг
-              хэрэглэгчидэд цаг алдалгүй хүргэхийг зорилт болгон ажиллаж байна
+              Maka-гийн түүх суралцахад туслах математикийн үзүүлэн, тараах
+              материалаас эхэлсэн. Хүүхэд бүрт ойлгомжтой, сонирхолтой байдлаар
+              мэдлэг хүргэх хүсэл маань бидний сонголт, үйлчилгээг чиглүүлдэг.
+            </p>
+            <p>
+              Өнөөдөр бид maka.mn-ээр дамжуулан дэвтэр, үзэг бичгийн хэрэгсэл,
+              сургалтын хэрэглэгдэхүүн, зураг урлалын бүтээгдэхүүнийг нэг дор
+              санал болгож байна. Хичээл, ажил, шинэ санаа бүрт тань хэрэгтэй
+              зүйлсийг сонгоход хялбар байлгах нь бидний зорилго.
             </p>
           </div>
 

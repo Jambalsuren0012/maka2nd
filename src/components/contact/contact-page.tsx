@@ -22,8 +22,8 @@ const initialFormState: ContactFormState = {
 const contactItems = [
   {
     title: "И-мэйл",
-    value: "info@sodtech.mn",
-    href: "mailto:hello@sodtech.mn",
+    value: "info@maka.mn",
+    href: "mailto:hello@maka.mn",
     description: "И-мэйлээр хүсэлтээ илгээнэ үү.",
   },
   {
@@ -463,7 +463,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Location placeholder */}
+      {/* Location */}
       <section id="location" className="bg-[#f5f5f1]">
         <div className="mx-auto max-w-[1600px] px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
           <div className="grid overflow-hidden rounded-[28px] bg-neutral-950 text-white lg:grid-cols-2">
@@ -474,14 +474,14 @@ export default function ContactPage() {
                 </p>
 
                 <h2 className="mt-4 text-4xl font-black tracking-[-0.06em] sm:text-5xl">
-                  Sodtech салбар
+                  Maka
                   <br />
                   дэлгүүр
                 </h2>
 
                 <p className="mt-6 max-w-[430px] leading-7 text-white/65">
-                  Улаанбаатар хотод байрлах манай салбар дэлгүүрээр зочилж,
-                  бүтээгдэхүүнүүдтэй танилцаарай.
+                  Улаанбаатар Их Дэлгүүрт байрлах манай салбар дэлгүүрээр
+                  зочилж, бүтээгдэхүүнүүдтэй танилцаарай.
                 </p>
               </div>
 
@@ -497,19 +497,14 @@ export default function ContactPage() {
             </div>
 
             <div className="relative min-h-[380px] bg-[#deded8]">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center text-neutral-500">
-                  <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-neutral-950 shadow-lg">
-                    <LocationIcon />
-                  </span>
-
-                  <p className="mt-4 text-sm font-semibold">Google Map хэсэг</p>
-
-                  <p className="mt-1 text-xs">
-                    Дараа iframe эсвэл map API холбоно
-                  </p>
-                </div>
-              </div>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d773.2987282769694!2d106.90280309647903!3d47.91453866555295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5d9693552fdd7379%3A0x3f3085bc91f619bb!2sMaka.mn!5e1!3m2!1sen!2smn!4v1792638498921!5m2!1sen!2smn"
+                title="Store location on Google Maps"
+                width="100%"
+                height="100%"
+                loading="lazy"
+                className="absolute inset-0 h-full w-full border-0"
+              />
             </div>
           </div>
         </div>

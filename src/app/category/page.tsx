@@ -4,10 +4,11 @@ import Link from "next/link";
 
 import { getProducts } from "@/lib/products";
 import type { Product } from "@/lib/products";
+import { STATIONERY_CATEGORIES } from "@/lib/products";
 
 export const metadata: Metadata = {
   title: "Ангилал",
-  description: "Sodtech дэлгүүрийн бүтээгдэхүүний ангиллууд.",
+  description: "Maka бичиг хэргийн дэлгүүрийн бүх ангилал.",
 };
 
 type CategoryCard = {
@@ -23,32 +24,12 @@ type ServiceItem = {
   icon: "support" | "delivery" | "share" | "secure";
 };
 
-const categoryCards: CategoryCard[] = [
-  {
-    title: "Ухаалаг утас",
-    description: "Шинэ үеийн ухаалаг гар утаснуудтай танилцаарай.",
-    href: "/category/smartphones",
-    category: "smartphones",
-  },
-  {
-    title: "Зөөврийн компьютер",
-    description: "Ажил, хичээл болон өдөр тутмын хэрэглээнд.",
-    href: "/category/laptops",
-    category: "laptops",
-  },
-  {
-    title: "Таблет",
-    description: "Ажил болон зугаа цэнгэлд зориулсан таблетууд.",
-    href: "/category/tablets",
-    category: "tablets",
-  },
-  {
-    title: "Дагалдах хэрэгсэл",
-    description: "Цэнэглэгч, кабель, чихэвч болон бусад хэрэгслүүд.",
-    href: "/category/mobile-accessories",
-    category: "mobile-accessories",
-  },
-];
+const categoryCards: CategoryCard[] = STATIONERY_CATEGORIES.map((category) => ({
+  title: category.title,
+  description: category.description,
+  href: `/category/${category.slug}`,
+  category: category.slug,
+}));
 
 const serviceItems: ServiceItem[] = [
   {
@@ -264,7 +245,7 @@ export default async function CategoryIndexPage() {
 
           <p className="max-w-[520px] text-base leading-7 text-neutral-600">
             Манай дэлгүүрийн бүтээгдэхүүнүүдийг ангиллаар нь үзэж, өөрт тохирох
-            төхөөрөмжөө сонгоорой.
+            бичиг хэргийн хэрэгслээ сонгоорой.
           </p>
         </div>
 
@@ -291,7 +272,7 @@ export default async function CategoryIndexPage() {
             <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5">
               <div className="min-w-0">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/55">
-                  Sodtech
+                  Maka
                 </p>
 
                 <h2 className="mt-2 text-[20px] font-bold tracking-[-0.04em]">

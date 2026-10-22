@@ -28,30 +28,30 @@ type ExtendedSlide = Slide & {
 const slides: Slide[] = [
   {
     id: 1,
-    title: "DUST AND WATERPROOF",
-    description: "Powerful sound designed for every environment.",
-    buttonLabel: "Shop Speakers",
-    href: "/collections/speakers",
+    title: "Санаагаа цаасан дээр",
+    description: "Төлөвлөгч, тэмдэглэлийн дэвтрээр өдөр бүрээ цэгцлээрэй.",
+    buttonLabel: "Дэвтэр үзэх",
+    href: "/category/notebooks",
     image:
-      "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=2200&q=90",
+      "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=2200&q=90",
   },
   {
     id: 2,
-    title: "IMMERSIVE SOUND EXPERIENCE",
-    description: "Lose yourself in crystal-clear and detailed audio.",
-    buttonLabel: "Shop Headphones",
-    href: "/collections/headphones",
+    title: "Өнгөөр бүтээ",
+    description: "Зураг, урлалын хэрэгслээр санаагаа бодит болгоорой.",
+    buttonLabel: "Урлалын хэрэгсэл",
+    href: "/category/art-supplies",
     image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=2200&q=90",
+      "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=2200&q=90",
   },
   {
     id: 3,
-    title: "SMALL DESIGN. GREAT SOUND.",
-    description: "Premium wireless audio that moves with you.",
-    buttonLabel: "Shop Earphones",
-    href: "/collections/earphones",
+    title: "Ширээгээ цэгцэл",
+    description: "Өдөр тутмын ажилд хэрэгтэй жижиг зүйлс нэг дор.",
+    buttonLabel: "Ширээний хэрэгсэл",
+    href: "/category/desk-essentials",
     image:
-      "https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=2200&q=90",
+      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2200&q=90",
   },
 ];
 

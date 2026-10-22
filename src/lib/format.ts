@@ -9,5 +9,5 @@ export function formatPrice(price: number): string {
 
   const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  return `${isNegative ? "-" : ""}$${formattedInteger}.${decimalPart}`;
+  return `${isNegative ? "-" : ""}${formattedInteger}.${decimalPart} ₮`;
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import ProductGallery from "./product-gallery";
 import type { Product } from "@/lib/products";
+import { formatPrice } from "@/lib/format";
 import RelatedProducts from "./related-products";
 type ProductDetailProps = {
   product: Product;
@@ -29,15 +30,6 @@ const colors: ProductColor[] = [
     value: "#D8D0C3",
   },
 ];
-
-function formatPrice(price: number) {
-  return new Intl.NumberFormat("mn-MN", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(price);
-}
 
 function StarIcon() {
   return (
@@ -162,7 +154,7 @@ export default function ProductDetail({
                   {product.brand ?? product.category}
                 </p>
 
-                <h1 className="mt-2 text-4xl font-black tracking-[-0.045em] sm:text-5xl">
+                <h1 className="mt-2 text-4xl  font-black tracking-[-0.045em] sm:text-5xl">
                   {product.title}
                 </h1>
 
@@ -282,11 +274,7 @@ export default function ProductDetail({
                   disabled={stock === 0}
                   className="mt-5 flex w-full items-center justify-between rounded-full bg-neutral-950 px-6 py-4 font-semibold text-white transition hover:bg-neutral-700 disabled:cursor-not-allowed disabled:bg-neutral-300"
                 >
-                  <span className="flex items-center gap-2">
-                    <CartIcon />
-
-                    {stock > 0 ? "Сагсанд нэмэх" : "Бараа дууссан"}
-                  </span>
+                  <span>{stock > 0 ? "Сагсанд нэмэх" : "Бараа дууссан"}</span>
 
                   <span>{formatPrice(finalTotal)}</span>
                 </button>

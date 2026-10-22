@@ -2,11 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import ProductDetail from "@/components/product/product-detail";
-import {
-  getProduct,
-  getProductsByCategory,
-  type ElectronicCategory,
-} from "@/lib/products";
+import { getProduct, getProductsByCategory } from "@/lib/products";
 
 type ProductDetailsPageProps = {
   params: Promise<{
@@ -48,9 +44,7 @@ export default async function ProductDetailsPage({
     notFound();
   }
 
-  const category = product.category as ElectronicCategory;
-
-  const categoryProducts = await getProductsByCategory(category, 12);
+  const categoryProducts = await getProductsByCategory(product.category, 12);
 
   const relatedProducts = categoryProducts
     .filter((item) => item.id !== product.id)
